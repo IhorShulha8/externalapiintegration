@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: externalapiintegration
+
+server:
+  port: 8099
