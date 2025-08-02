@@ -7,8 +7,27 @@ services:
     volumes:
       - ./docker/fake-external-api-mappings:/home/wiremock/mappings:ro
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/__admin/"]
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8080/__admin/" ]
       interval: 10s
       timeout: 3s
       retries: 5
       start_period: 5s
+
+  integration-app:
+    build: .
+    container_name: integration-app
+    depends_on:
+      fake-external-api:
+        condition: service_healthy
+    environment:
+      - EXTERNAL_API_KEY=demo-secret-key
+      - EXTERNAL_API_BASE_URL=http://fake-external-api:8080
+      - EXTERNAL_API_MAX_RPS=5
+    ports:
+      - "8088:8099"
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8099/actuator/health" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s

@@ -4,3 +4,13 @@ spring:
 
 server:
   port: 8099
+
+external:
+  api:
+    base-url: ${EXTERNAL_API_BASE_URL:http://localhost:8081}
+    key: ${EXTERMAL_API_KEY:demo-secret-key}
+    max-rps: ${EXTERMAL_API_MAX_RPS:5}
+
+logging:
+  level:
+    externalapiintegration: DEBUG
